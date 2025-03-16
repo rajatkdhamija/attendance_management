@@ -32,6 +32,23 @@ class AbsenceModel extends Absence {
         rejectedAt: '',
       );
 
+  factory AbsenceModel.fromJson(Map<String, dynamic> json) {
+    return AbsenceModel(
+      id: json['id'] as int,
+      admitterId: json['admitterId'] as int?,
+      admitterNote: json['admitterNote'] as String?,
+      confirmedAt: json['confirmedAt'] as String?,
+      createdAt: json['createdAt'] as String,
+      crewId: json['crewId'] as int,
+      endDate: json['endDate'] as String,
+      startDate: json['startDate'] as String,
+      type: json['type'] as String,
+      userId: json['userId'] as int,
+      memberNote: json['memberNote'] as String?,
+      rejectedAt: json['rejectedAt'] as String?,
+    );
+  }
+
   factory AbsenceModel.fromMap(Map<String, dynamic> map) {
     return AbsenceModel(
       id: map['id'] as int,

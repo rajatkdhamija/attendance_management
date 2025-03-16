@@ -17,6 +17,6 @@ $statusCode ${statusCode is String ? '' : ' Error'}: $message''';
   List<dynamic> get props => [message, statusCode];
 }
 
-class FileException extends Failure {
-  FileException({required super.message, required super.statusCode});
+class FileFailure extends Failure {
+  FileFailure({required super.message, required super.statusCode});
 }
