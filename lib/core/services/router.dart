@@ -1,12 +1,13 @@
 import 'package:attendance_management/core/common/views/page_under_construction.dart'
     show PageUnderConstruction;
+import 'package:attendance_management/src/home/presentation/views/home_screen.dart';
 import 'package:flutter/material.dart';
 
 Route<dynamic> generateRoute(RouteSettings settings) {
   switch (settings.name) {
     case '/':
       return _pageBuilder(
-        (_) => const PageUnderConstruction(),
+        (_) => const HomeScreen(),
         settings: settings,
       );
     default:
