@@ -16,6 +16,7 @@ class AbsencesBloc extends Bloc<AbsencesEvent, AbsencesState> {
     on<LoadAbsencesEvent>(_getAbsencesHandler);
     on<FilterAbsencesEvent>(_filterAbsencesHandler);
     on<LoadMoreAbsencesEvent>(_loadMoreAbsencesHandler);
+    on<ResetFilterAbsencesEvent>(_reserFilterAbsencesHandler);
   }
 
   final GetAbsences _getAbsences;
@@ -24,6 +25,23 @@ class AbsencesBloc extends Bloc<AbsencesEvent, AbsencesState> {
   int _currentPage = 1;
   static const int _limit = 10;
   bool _hasMore = true;
+  String? _type;
+  String? _startDate;
+  String? _endDate;
+
+
+  void _reserFilterAbsencesHandler(
+    ResetFilterAbsencesEvent event,
+    Emitter<AbsencesState> emit,
+  ) {
+    _type = null;
+    _startDate = null;
+    _endDate = null;
+    _currentPage = 1;
+    _hasMore = true;
+    _paginatedAbsences = _allAbsences.take(_limit).toList();
+    emit(AbsencesLoaded(absences: _paginatedAbsences, hasMore: _hasMore));
+  }
 
   Future<void> _getAbsencesHandler(
     LoadAbsencesEvent event,
@@ -52,7 +70,8 @@ class AbsencesBloc extends Bloc<AbsencesEvent, AbsencesState> {
       Emitter<AbsencesState> emit,
       ) {
     if (!_hasMore) return;
-
+    print('LoadMoreAbsencesEvent');
+    emit(AbsencesLoadingMore());
     _currentPage++;
     int startIndex = (_currentPage - 1) * _limit;
     int endIndex = startIndex + _limit;
@@ -76,8 +95,9 @@ class AbsencesBloc extends Bloc<AbsencesEvent, AbsencesState> {
     Emitter<AbsencesState> emit,
   ) {
     List<Absence> filteredAbsences = _allAbsences;
-
+    _currentPage = 1;
     if (event.type != null) {
+      _type = event.type;
       if (event.type?.toLowerCase() == 'other') {
         filteredAbsences =
             filteredAbsences
@@ -99,10 +119,12 @@ class AbsencesBloc extends Bloc<AbsencesEvent, AbsencesState> {
                 .toList();
       }
     }
+    _startDate = event.startDate ?? _startDate;
+    _endDate = event.endDate ?? _endDate;
+    if (_startDate != null && _endDate != null) {
 
-    if (event.startDate != null && event.endDate != null) {
-      DateTime parsedStartDate = DateTime.parse(event.startDate!).toLocal();
-      DateTime parsedEndDate = DateTime.parse(event.endDate!).toLocal();
+      DateTime parsedStartDate = DateTime.parse(_startDate!).toLocal();
+      DateTime parsedEndDate = DateTime.parse(_endDate!).toLocal();
 
       filteredAbsences =
           filteredAbsences.where((absence) {
@@ -127,9 +149,9 @@ class AbsencesBloc extends Bloc<AbsencesEvent, AbsencesState> {
     emit(
       AbsencesFiltered(
         absences: _paginatedAbsences,
-        type: event.type,
-        startDate: event.startDate,
-        endDate: event.endDate,
+        type: _type,
+        startDate: _startDate,
+        endDate: _endDate,
       ),
     );
   }

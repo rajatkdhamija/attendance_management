@@ -15,6 +15,10 @@ class LoadMoreAbsencesEvent extends AbsencesEvent {
   const LoadMoreAbsencesEvent();
 }
 
+class ResetFilterAbsencesEvent extends AbsencesEvent {
+  const ResetFilterAbsencesEvent();
+}
+
 class FilterAbsencesEvent extends AbsencesEvent {
   final String? type;
   final String? startDate;

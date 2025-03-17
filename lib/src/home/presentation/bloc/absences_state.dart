@@ -38,6 +38,11 @@ class AbsencesEmpty extends AbsencesState {
   const AbsencesEmpty();
 }
 
+class AbsencesLoadingMore extends AbsencesState {
+  const AbsencesLoadingMore();
+}
+
+
 class AbsencesFiltered extends AbsencesState {
   final List<Absence> absences;
   final String? type;
