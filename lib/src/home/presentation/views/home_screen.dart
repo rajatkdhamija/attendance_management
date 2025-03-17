@@ -7,13 +7,45 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
 
-class HomeScreen extends StatelessWidget {
+class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
+
+  @override
+  State<HomeScreen> createState() => _HomeScreenState();
+}
+
+class _HomeScreenState extends State<HomeScreen> {
+  late ScrollController _scrollController;
+
+  @override
+  void initState() {
+    super.initState();
+    _scrollController = ScrollController();
+    _scrollController.addListener(_onScroll);
+
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      final bloc = context.read<AbsencesBloc>();
+      if (bloc.state is! AbsencesLoaded && bloc.state is! AbsencesFiltered) {
+        bloc.add(LoadAbsencesEvent());
+      }
+    });
+  }
+
+  void _onScroll() {
+    if (_scrollController.position.pixels >=
+        _scrollController.position.maxScrollExtent * 0.9) {
+      final absencesBloc = context.read<AbsencesBloc>();
+      Future.delayed(Duration(milliseconds: 500), () {
+        absencesBloc.add(LoadMoreAbsencesEvent());
+      });
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
     String? startDate;
     String? endDate;
+    String? type;
 
     return BlocProvider(
       create: (_) => sl<AbsencesBloc>()..add(LoadAbsencesEvent()),
@@ -46,22 +78,27 @@ class HomeScreen extends StatelessWidget {
                           ),
                         ],
                       ),
-                      padding: EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+                      padding: EdgeInsets.symmetric(
+                        horizontal: 10,
+                        vertical: 5,
+                      ),
                       child: DropdownButtonFormField<String>(
-                        value: state is AbsencesFiltered ? state.type : null,
+                        value: (state is AbsencesFiltered || state is AbsencesLoaded) ? type : null,
                         decoration: InputDecoration(
                           labelText: 'Filter by Type',
                           border: InputBorder.none,
                         ),
-                        items: ['All', 'Sickness', 'Vacation', 'Other']
-                            .map(
-                              (type) => DropdownMenuItem(
-                            value: type == 'All' ? null : type,
-                            child: Text(type),
-                          ),
-                        )
-                            .toList(),
+                        items:
+                            ['All', 'Sickness', 'Vacation', 'Other']
+                                .map(
+                                  (type) => DropdownMenuItem(
+                                    value: type == 'All' ? null : type,
+                                    child: Text(type),
+                                  ),
+                                )
+                                .toList(),
                         onChanged: (value) {
+                          type = value;
                           context.read<AbsencesBloc>().add(
                             FilterAbsencesEvent(type: value),
                           );
@@ -80,7 +117,10 @@ class HomeScreen extends StatelessWidget {
                             onPressed: () async {
                               final DateTime? picked = await showDatePicker(
                                 context: context,
-                                initialDate: DateTime.now(),
+                                initialDate:
+                                    startDate != null
+                                        ? DateTime.parse(startDate!)
+                                        : DateTime.now(),
                                 firstDate: DateTime(2000),
                                 lastDate: DateTime(2101),
                               );
@@ -95,9 +135,10 @@ class HomeScreen extends StatelessWidget {
                               }
                             },
                             child: Text(
-                              state is AbsencesFiltered &&
-                                      (state.startDate != null)
-                                  ? 'Start: ${DateFormat('dd MMM yyyy').format(DateTime.parse(state.startDate!))}'
+                              (state is AbsencesFiltered ||
+                                          state is AbsencesLoaded) &&
+                                      (startDate != null)
+                                  ? 'Start: ${DateFormat('dd MMM yyyy').format(DateTime.parse(startDate!))}'
                                   : 'Select Start Date',
                             ),
                           ),
@@ -108,7 +149,10 @@ class HomeScreen extends StatelessWidget {
                             onPressed: () async {
                               final DateTime? picked = await showDatePicker(
                                 context: context,
-                                initialDate: DateTime.now(),
+                                initialDate:
+                                    endDate != null
+                                        ? DateTime.parse(endDate!)
+                                        : DateTime.now(),
                                 firstDate: DateTime(2000),
                                 lastDate: DateTime(2101),
                               );
@@ -123,8 +167,10 @@ class HomeScreen extends StatelessWidget {
                               }
                             },
                             child: Text(
-                              state is AbsencesFiltered && (state.endDate != null)
-                                  ? 'End: ${DateFormat('dd MMM yyyy').format(DateTime.parse(state.endDate!))}'
+                              (state is AbsencesFiltered ||
+                                          state is AbsencesLoaded) &&
+                                      (endDate != null)
+                                  ? 'End: ${DateFormat('dd MMM yyyy').format(DateTime.parse(endDate!))}'
                                   : 'Select End Date',
                             ),
                           ),
@@ -133,6 +179,33 @@ class HomeScreen extends StatelessWidget {
                     );
                   },
                 ),
+                SizedBox(height: 10),
+                SizedBox(
+                  width: double.infinity, // Makes the button take full width
+                  child: ElevatedButton(
+                    onPressed: () {
+                      startDate = null;
+                      endDate = null;
+                      context.read<AbsencesBloc>().add(LoadAbsencesEvent());
+                    },
+                    style: ElevatedButton.styleFrom(
+                      padding: const EdgeInsets.symmetric(vertical: 14),
+                      // Adjust button height
+                      backgroundColor: Colors.redAccent,
+                      // Optional: Highlight reset button
+                      foregroundColor:
+                          Colors.white, // Optional: Ensure text contrast
+                    ),
+                    child: const Text(
+                      'Reset Filters',
+                      style: TextStyle(
+                        fontSize: 16,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                  ),
+                ),
+                SizedBox(height: 10),
                 Expanded(
                   child: BlocConsumer<AbsencesBloc, AbsencesState>(
                     listener: (context, state) {
@@ -218,6 +291,8 @@ class HomeScreen extends StatelessWidget {
                             state is AbsencesFiltered
                                 ? state.absences
                                 : (state as AbsencesLoaded).absences;
+                        final hasMore =
+                            state is AbsencesLoaded ? state.hasMore : false;
                         if (absences.isEmpty) {
                           return Center(
                             child: Column(
@@ -246,8 +321,16 @@ class HomeScreen extends StatelessWidget {
                           );
                         }
                         return ListView.builder(
-                          itemCount: absences.length,
+                          controller: _scrollController,
+                          itemCount: absences.length + 1,
                           itemBuilder: (context, index) {
+                            if (index == absences.length) {
+                              return hasMore
+                                  ? const Center(
+                                    child: CircularProgressIndicator(),
+                                  )
+                                  : const SizedBox.shrink();
+                            }
                             final absence = absences[index];
                             return Card(
                               margin: EdgeInsets.symmetric(

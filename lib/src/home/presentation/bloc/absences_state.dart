@@ -16,12 +16,13 @@ class AbsencesLoading extends AbsencesState {
 }
 
 class AbsencesLoaded extends AbsencesState {
-  const AbsencesLoaded({required this.absences});
+  const AbsencesLoaded({required this.absences, required this.hasMore});
 
   final List<Absence> absences;
+  final bool hasMore;
 
   @override
-  List<Object> get props => [absences];
+  List<Object> get props => [absences, hasMore];
 }
 
 class AbsencesError extends AbsencesState {

@@ -13,7 +13,7 @@ Future<void> init() async {
 
 Future<void> _iniHome() async {
   sl
-    ..registerFactory(() => AbsencesBloc(getAbsences: sl()))
+    ..registerLazySingleton(() => AbsencesBloc(getAbsences: sl()))
     ..registerLazySingleton(() => GetAbsences(sl()))
     ..registerLazySingleton<AbsenceRepository>(
       () => AbsenceRepositoryImplementation(sl()),
