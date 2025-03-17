@@ -23,7 +23,7 @@ class MyApp extends StatelessWidget {
         useMaterial3: true,
         visualDensity: VisualDensity.adaptivePlatformDensity,
         scaffoldBackgroundColor: Colors.white,
-        appBarTheme: const AppBarTheme(backgroundColor: Colors.transparent),
+        appBarTheme: const AppBarTheme(backgroundColor: Colors.transparent, titleTextStyle: TextStyle(color: Colors.white)),
       ),
       onGenerateRoute: generateRoute,
     );

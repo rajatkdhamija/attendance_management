@@ -9,10 +9,12 @@ class Absence extends Equatable {
   final int crewId;
   final String endDate;
   final String startDate;
-  final String type;
+  final String? type;
   final int userId;
   final String? memberNote;
   final String? rejectedAt;
+  final String? name;
+  final String? image;
 
   const Absence({
     required this.id,
@@ -27,6 +29,8 @@ class Absence extends Equatable {
     required this.userId,
     this.memberNote,
     this.rejectedAt,
+    this.name,
+    this.image,
   });
 
   @override

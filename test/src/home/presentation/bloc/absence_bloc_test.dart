@@ -1,7 +1,7 @@
 import 'package:attendance_management/core/errors/failure.dart';
 import 'package:attendance_management/src/home/domain/usecases/get_absences.dart'
     show GetAbsences;
-import 'package:attendance_management/src/home/presentation/bloc/absence_bloc.dart';
+import 'package:attendance_management/src/home/presentation/bloc/absences_bloc.dart';
 import 'package:bloc_test/bloc_test.dart';
 import 'package:dartz/dartz.dart';
 import 'package:flutter_test/flutter_test.dart';
@@ -11,14 +11,14 @@ class MockGetAbsences extends Mock implements GetAbsences {}
 
 void main() {
   late GetAbsences getAbsences;
-  late AbsenceBloc bloc;
+  late AbsencesBloc bloc;
   final tFailure = FileFailure(
     message: 'Failed to load absences',
     statusCode: 4032,
   );
   setUp(() {
     getAbsences = MockGetAbsences();
-    bloc = AbsenceBloc(getAbsences: getAbsences);
+    bloc = AbsencesBloc(getAbsences: getAbsences);
   });
 
   test('initial state should be [AbsenceInitial] ', () async {
@@ -26,7 +26,7 @@ void main() {
   });
 
   group('getAbsences', () {
-    blocTest<AbsenceBloc, AbsenceState>(
+    blocTest<AbsencesBloc, AbsencesState>(
       'should emit [AbsencesLoading, AbsencesLoaded] when '
       'getAbsences is called',
       build: () {
@@ -40,7 +40,7 @@ void main() {
         verifyNoMoreInteractions(getAbsences);
       },
     );
-    blocTest<AbsenceBloc, AbsenceState>(
+    blocTest<AbsencesBloc, AbsencesState>(
       'should emit [AbsencesLoading, AbsencesError] when getAbsences '
       'is unsuccessful',
       build: () {

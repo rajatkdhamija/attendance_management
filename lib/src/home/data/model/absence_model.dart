@@ -14,6 +14,8 @@ class AbsenceModel extends Absence {
     required super.userId,
     super.memberNote,
     super.rejectedAt,
+    required super.name,
+    required super.image,
   });
 
   const AbsenceModel.empty()
@@ -30,9 +32,15 @@ class AbsenceModel extends Absence {
         userId: 0,
         memberNote: '',
         rejectedAt: '',
+        name: '',
+        image: '',
       );
 
-  factory AbsenceModel.fromJson(Map<String, dynamic> json) {
+  factory AbsenceModel.fromJson(
+    Map<String, dynamic> json,
+    Map<int, Map<String, String>> membersMap,
+  ) {
+    int userId = json['userId'] as int;
     return AbsenceModel(
       id: json['id'] as int,
       admitterId: json['admitterId'] as int?,
@@ -43,9 +51,11 @@ class AbsenceModel extends Absence {
       endDate: json['endDate'] as String,
       startDate: json['startDate'] as String,
       type: json['type'] as String,
-      userId: json['userId'] as int,
+      userId: userId,
       memberNote: json['memberNote'] as String?,
       rejectedAt: json['rejectedAt'] as String?,
+      name: membersMap[userId]?['name'] ?? 'Unknown',
+      image: membersMap[userId]?['image'] ?? '',
     );
   }
 
@@ -63,6 +73,8 @@ class AbsenceModel extends Absence {
       userId: map['userId'] as int,
       memberNote: map['memberNote'] as String?,
       rejectedAt: map['rejectedAt'] as String?,
+      name: map['name'] as String?,
+      image: map['image'] as String?,
     );
   }
 
@@ -80,6 +92,8 @@ class AbsenceModel extends Absence {
       'userId': userId,
       'memberNote': memberNote,
       'rejectedAt': rejectedAt,
+      'name': name,
+      'image': image,
     };
   }
 
@@ -96,6 +110,8 @@ class AbsenceModel extends Absence {
     int? userId,
     String? memberNote,
     String? rejectedAt,
+    String? name,
+    String? image,
   }) {
     return AbsenceModel(
       id: id ?? this.id,
@@ -110,6 +126,8 @@ class AbsenceModel extends Absence {
       userId: userId ?? this.userId,
       memberNote: memberNote ?? this.memberNote,
       rejectedAt: rejectedAt ?? this.rejectedAt,
+      name: name ?? this.name,
+      image: image ?? this.image,
     );
   }
 }
