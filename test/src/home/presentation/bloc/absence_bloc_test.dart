@@ -34,7 +34,18 @@ void main() {
         return bloc;
       },
       act: (bloc) => bloc.add(const LoadAbsencesEvent()),
-      expect: () => const [AbsencesLoading(), AbsencesLoaded(absences: [], hasMore: false)],
+      expect:
+          () => const [
+            AbsencesLoading(),
+            AbsencesLoaded(
+              absences: [],
+              hasMore: false,
+              totalAbsences: [],
+              type: null,
+              startDate: null,
+              endDate: null,
+            ),
+          ],
       verify: (_) {
         verify(() => getAbsences()).called(1);
         verifyNoMoreInteractions(getAbsences);
