@@ -15,6 +15,7 @@ class Absence extends Equatable {
   final String? rejectedAt;
   final String? name;
   final String? image;
+  final String? status;
 
   const Absence({
     required this.id,
@@ -31,6 +32,7 @@ class Absence extends Equatable {
     this.rejectedAt,
     this.name,
     this.image,
+    this.status,
   });
 
   @override

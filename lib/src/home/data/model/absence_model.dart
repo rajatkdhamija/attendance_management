@@ -16,6 +16,7 @@ class AbsenceModel extends Absence {
     super.rejectedAt,
     required super.name,
     required super.image,
+    required super.status,
   });
 
   const AbsenceModel.empty()
@@ -34,6 +35,7 @@ class AbsenceModel extends Absence {
         rejectedAt: '',
         name: '',
         image: '',
+        status: '',
       );
 
   factory AbsenceModel.fromJson(
@@ -56,6 +58,7 @@ class AbsenceModel extends Absence {
       rejectedAt: json['rejectedAt'] as String?,
       name: membersMap[userId]?['name'] ?? 'Unknown',
       image: membersMap[userId]?['image'] ?? '',
+      status: json['status'] as String,
     );
   }
 
@@ -75,6 +78,7 @@ class AbsenceModel extends Absence {
       rejectedAt: map['rejectedAt'] as String?,
       name: map['name'] as String?,
       image: map['image'] as String?,
+      status: map['status'] as String,
     );
   }
 
@@ -94,6 +98,7 @@ class AbsenceModel extends Absence {
       'rejectedAt': rejectedAt,
       'name': name,
       'image': image,
+      'status': status,
     };
   }
 
@@ -112,6 +117,7 @@ class AbsenceModel extends Absence {
     String? rejectedAt,
     String? name,
     String? image,
+    String? status,
   }) {
     return AbsenceModel(
       id: id ?? this.id,
@@ -128,6 +134,7 @@ class AbsenceModel extends Absence {
       rejectedAt: rejectedAt ?? this.rejectedAt,
       name: name ?? this.name,
       image: image ?? this.image,
+      status: status ?? this.status,
     );
   }
 }

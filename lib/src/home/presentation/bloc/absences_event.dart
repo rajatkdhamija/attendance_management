@@ -29,3 +29,20 @@ class FilterAbsencesEvent extends AbsencesEvent {
   @override
   List<Object> get props => [type ?? '', startDate ?? '', endDate ?? ''];
 }
+
+class ExportingAbsencesEvent extends AbsencesEvent {
+  const ExportingAbsencesEvent();
+}
+
+class ExportingAbsencesSuccessEvent extends AbsencesEvent {
+  const ExportingAbsencesSuccessEvent();
+}
+
+class ExportingAbsencesErrorEvent extends AbsencesEvent {
+  final String message;
+
+  const ExportingAbsencesErrorEvent({required this.message});
+
+  @override
+  List<Object> get props => [message];
+}

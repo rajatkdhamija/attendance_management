@@ -22,7 +22,6 @@ class AbsenceLocalDataSourceImplementation implements AbsenceLocalDataSource {
   Future<String> readLocalJsonFile(String path) async {
     return await rootBundle.loadString(path);
   }
-
   @override
   Future<List<AbsenceModel>> absences() async {
     try {
@@ -40,9 +39,19 @@ class AbsenceLocalDataSourceImplementation implements AbsenceLocalDataSource {
           },
       };
 
-      return absencesData
-          .map((json) => AbsenceModel.fromJson(json, membersMap))
-          .toList();
+      return absencesData.map((json) {
+        // Determine status based on confirmedAt and rejectedAt
+        String status;
+        if (json['confirmedAt'] != null) {
+          status = 'Confirmed';
+        } else if (json['rejectedAt'] != null) {
+          status = 'Rejected';
+        } else {
+          status = 'Pending';
+        }
+
+        return AbsenceModel.fromJson({...json, 'status': status}, membersMap);
+      }).toList();
     } catch (e) {
       throw FileException(message: 'Failed to read file', statusCode: '404');
     }

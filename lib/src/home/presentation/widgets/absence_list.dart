@@ -11,6 +11,13 @@ class AbsencesList extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<AbsencesBloc, AbsencesState>(
+      buildWhen: (previous, current) {
+        return current is AbsencesLoading ||
+            current is AbsencesError ||
+            current is AbsencesEmpty ||
+            current is AbsencesLoaded ||
+            current is AbsencesFiltered;
+      },
       builder: (context, state) {
         if (state is AbsencesLoading) {
           return Center(child: CircularProgressIndicator());
@@ -70,6 +77,11 @@ class AbsencesList extends StatelessWidget {
                         'End: ${DateFormat('dd MMM yyyy').format(DateTime.parse(absence.endDate))}',
                         style: TextStyle(fontSize: 14),
                       ),
+                      if (absence.status != null)
+                        Text(
+                          'Status: ${absence.status}',
+                          style: TextStyle(fontSize: 14, fontWeight: FontWeight.w700),
+                        ),
                     ],
                   ),
                 ),

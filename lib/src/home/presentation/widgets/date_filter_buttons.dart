@@ -9,6 +9,9 @@ class DateFilterButtons extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<AbsencesBloc, AbsencesState>(
+      buildWhen: (previous, current) {
+        return current is AbsencesFiltered;
+      },
       builder: (context, state) {
         String? startDate;
         String? endDate;
