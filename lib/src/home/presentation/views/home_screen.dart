@@ -1,9 +1,7 @@
 import 'package:attendance_management/core/common/widgets/gradient_background.dart';
-import 'package:attendance_management/core/res/colours.dart';
 import 'package:attendance_management/core/res/media_res.dart';
 import 'package:attendance_management/core/services/injection_container.dart'
     show sl;
-import 'package:attendance_management/core/utils/core_utils.dart';
 import 'package:attendance_management/src/home/presentation/bloc/absences_bloc.dart';
 import 'package:attendance_management/src/home/presentation/widgets/absence_list.dart'
     show AbsencesList;
@@ -16,7 +14,6 @@ import 'package:attendance_management/src/home/presentation/widgets/reset_filter
 import 'package:attendance_management/src/home/presentation/widgets/total_absences_text.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:intl/intl.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
