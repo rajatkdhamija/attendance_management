@@ -64,14 +64,13 @@ class CoreUtils {
         await file.writeAsString(icsContent);
 
         XFile xFile = XFile(filePath);
-        Share.shareXFiles([xFile], text: "Download and import absences into Outlook.");
+        Share.shareXFiles([xFile]);
 
         onCreateSuccess();
       } else {
         onCreateFailure();
       }
     } catch (e) {
-      print(e);
       onCreateFailure();
     }
   }
@@ -112,7 +111,6 @@ class CoreUtils {
       icsContent.writeln('END:VCALENDAR');
       return icsContent.toString();
     } catch (e) {
-      print(e);
       return null;
     }
   }

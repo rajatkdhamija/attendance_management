@@ -9,9 +9,11 @@ import 'package:attendance_management/src/home/presentation/widgets/absence_list
     show AbsencesList;
 import 'package:attendance_management/src/home/presentation/widgets/date_filter_buttons.dart'
     show DateFilterButtons;
+import 'package:attendance_management/src/home/presentation/widgets/export_button.dart';
 import 'package:attendance_management/src/home/presentation/widgets/filter_dropdown.dart';
 import 'package:attendance_management/src/home/presentation/widgets/reset_filter_button.dart'
     show ResetFiltersButton;
+import 'package:attendance_management/src/home/presentation/widgets/total_absences_text.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
@@ -66,77 +68,7 @@ class _HomeScreenState extends State<HomeScreen> {
               children: [
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    BlocBuilder<AbsencesBloc, AbsencesState>(
-                      buildWhen: (previous, current) {
-                        return current is AbsencesLoaded ||
-                            current is AbsencesFiltered;
-                      },
-                      builder: (context, state) {
-                        if (state is AbsencesLoaded ||
-                            state is AbsencesFiltered) {
-                          var totalAbsences = 0;
-                          if (state is AbsencesLoaded) {
-                            totalAbsences = state.totalAbsences.length;
-                          } else if (state is AbsencesFiltered) {
-                            totalAbsences = state.totalAbsences.length;
-                          }
-                          return Text(
-                            "Total Absences: $totalAbsences",
-                            style: TextStyle(
-                              fontSize: 18,
-                              fontWeight: FontWeight.bold,
-                              color: Colours.primaryColour,
-                            ),
-                          );
-                        }
-                        return SizedBox.shrink(); // Hide if not loaded
-                      },
-                    ),
-                    BlocBuilder<AbsencesBloc, AbsencesState>(
-                      builder: (context, state) {
-                        bool isExporting = state is AbsencesExporting;
-
-                        return ElevatedButton(
-                          onPressed:
-                              isExporting
-                                  ? null
-                                  : () {
-                                    context.read<AbsencesBloc>().add(
-                                      ExportingAbsencesEvent(),
-                                    );
-                                    Future.delayed(Duration.zero, () {
-                                      if (context.mounted) {
-                                        CoreUtils.exportAbsencesToICal(
-                                          context,
-                                          () {
-                                            context.read<AbsencesBloc>().add(
-                                              ExportingAbsencesSuccessEvent(),
-                                            );
-                                          },
-                                          () {
-                                            context.read<AbsencesBloc>().add(
-                                              ExportingAbsencesErrorEvent(
-                                                message:
-                                                    'Failed to export to iCal',
-                                              ),
-                                            );
-                                            CoreUtils.showSnackBar(
-                                              context,
-                                              'Failed to export to iCal',
-                                            );
-                                          },
-                                        );
-                                      }
-                                    });
-                                  },
-                          child: Text(
-                            isExporting ? 'Exporting...' : 'Export to iCal',
-                          ),
-                        );
-                      },
-                    ),
-                  ],
+                  children: [TotalAbsencesText(), ExportButton()],
                 ),
                 SizedBox(height: 5),
                 FilterDropdown(),
