@@ -78,6 +78,6 @@ This project is licensed under the **MIT License**.
 
 ## 👨‍💻 Author
 - **Rajat Dhamija**
-- ✉️ [Your Email](mailto:rajatkdhamija@gmail.com)
+- ✉️ [rajatkdhamija@gmail.com](mailto:rajatkdhamija@gmail.com)
 ---
 
