@@ -1,5 +1,6 @@
 import 'package:attendance_management/core/errors/failure.dart';
-import 'package:attendance_management/src/home/domain/entities/absence.dart' show Absence;
+import 'package:attendance_management/src/home/domain/entities/absence.dart'
+    show Absence;
 import 'package:attendance_management/src/home/domain/usecases/get_absences.dart'
     show GetAbsences;
 import 'package:attendance_management/src/home/presentation/bloc/absences_bloc.dart';
@@ -18,6 +19,7 @@ void main() {
     message: 'Failed to load absences',
     statusCode: 4032,
   );
+
   setUp(() {
     mockGetAbsences = MockGetAbsences();
     bloc = AbsencesBloc(getAbsences: mockGetAbsences);
@@ -107,21 +109,24 @@ void main() {
   blocTest<AbsencesBloc, AbsencesState>(
     "Emits [AbsencesLoading, AbsencesLoaded] when LoadAbsencesEvent is added",
     build: () {
-      when(() => mockGetAbsences()).thenAnswer((_) async => Right(mockAbsences));
+      when(
+        () => mockGetAbsences(),
+      ).thenAnswer((_) async => Right(mockAbsences));
       return bloc;
     },
     act: (bloc) => bloc.add(LoadAbsencesEvent()),
-    expect: () => [
-      AbsencesLoading(),
-      AbsencesLoaded(
-        absences: mockAbsences.take(10).toList(),
-        hasMore: false,
-        totalAbsences: mockAbsences,
-        type: null,
-        startDate: null,
-        endDate: null,
-      ),
-    ],
+    expect:
+        () => [
+          AbsencesLoading(),
+          AbsencesLoaded(
+            absences: mockAbsences.take(10).toList(),
+            hasMore: false,
+            totalAbsences: mockAbsences,
+            type: null,
+            startDate: null,
+            endDate: null,
+          ),
+        ],
   );
 
   blocTest<AbsencesBloc, AbsencesState>(
@@ -131,10 +136,11 @@ void main() {
       return bloc;
     },
     act: (bloc) => bloc.add(LoadAbsencesEvent()),
-    expect: () => [
-      AbsencesLoading(),
-      AbsencesError(message: "Failed to load absences"),
-    ],
+    expect:
+        () => [
+          AbsencesLoading(),
+          AbsencesError(message: "Failed to load absences"),
+        ],
   );
 
   blocTest<AbsencesBloc, AbsencesState>(
@@ -154,7 +160,46 @@ void main() {
   blocTest<AbsencesBloc, AbsencesState>(
     "Emits AbsencesExportError when ExportingAbsencesErrorEvent is added",
     build: () => bloc,
-    act: (bloc) => bloc.add(ExportingAbsencesErrorEvent(message: "Export failed")),
+    act:
+        (bloc) =>
+            bloc.add(ExportingAbsencesErrorEvent(message: "Export failed")),
     expect: () => [AbsencesExportError(message: "Export failed")],
   );
+
+  group('ResetFilterAbsencesEvent', () {
+    blocTest<AbsencesBloc, AbsencesState>(
+      'should reset filters and emit AbsencesFiltered state',
+      build: () => bloc,
+      act: (bloc) {
+        // Simulate previous state with filters applied
+        bloc.add(ResetFilterAbsencesEvent());
+      },
+      expect:
+          () => [
+            AbsencesFiltered(
+              absences:
+                  bloc.state is AbsencesFiltered
+                      ? (bloc.state as AbsencesFiltered).totalAbsences
+                          .take(10)
+                          .toList()
+                      : [],
+              totalAbsences:
+                  bloc.state is AbsencesFiltered
+                      ? (bloc.state as AbsencesFiltered).totalAbsences
+                      : [],
+              type: null,
+              startDate: null,
+              endDate: null,
+            ),
+          ],
+      verify: (_) {
+        expect(bloc.state, isA<AbsencesFiltered>());
+        final state = bloc.state as AbsencesFiltered;
+        expect(state.absences.length, lessThanOrEqualTo(10));
+        expect(state.type, isNull);
+        expect(state.startDate, isNull);
+        expect(state.endDate, isNull);
+      },
+    );
+  });
 }

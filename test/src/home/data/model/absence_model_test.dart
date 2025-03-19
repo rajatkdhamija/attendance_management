@@ -44,4 +44,11 @@ void main() {
       expect(result.id, 2);
     });
   });
+
+  group('fromJson', () {
+    test('should return a valid [AbsenceModel] from the json', () {
+      final result = AbsenceModel.fromJson(tMap, {});
+      expect(result, tAbsenceModel);
+    });
+  });
 }
