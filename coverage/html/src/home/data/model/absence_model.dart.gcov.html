@@ -37,7 +37,7 @@
           </tr>
           <tr>
             <td class="headerItem">Test Date:</td>
-            <td class="headerValue">2025-03-19 23:38:28</td>
+            <td class="headerValue">2025-03-19 23:57:39</td>
             <td></td>
             <td class="headerItem">Functions:</td>
             <td class="headerCovTableEntryHi">-</td>
@@ -63,7 +63,7 @@
 <span id="L1"><span class="lineNum">       1</span>              : import 'package:attendance_management/src/home/domain/entities/absence.dart';</span>
 <span id="L2"><span class="lineNum">       2</span>              : </span>
 <span id="L3"><span class="lineNum">       3</span>              : class AbsenceModel extends Absence {</span>
-<span id="L4"><span class="lineNum">       4</span> <span class="tlaGNC">           1 :   const AbsenceModel({</span></span>
+<span id="L4"><span class="lineNum">       4</span> <span class="tlaGNC">           2 :   const AbsenceModel({</span></span>
 <span id="L5"><span class="lineNum">       5</span>              :     required super.id,</span>
 <span id="L6"><span class="lineNum">       6</span>              :     super.admitterId,</span>
 <span id="L7"><span class="lineNum">       7</span>              :     super.admitterNote,</span>
@@ -100,27 +100,27 @@
 <span id="L38"><span class="lineNum">      38</span>              :         status: '',</span>
 <span id="L39"><span class="lineNum">      39</span>              :       );</span>
 <span id="L40"><span class="lineNum">      40</span>              : </span>
-<span id="L41"><span class="lineNum">      41</span> <span class="tlaGNC">           1 :   factory AbsenceModel.fromJson(</span></span>
+<span id="L41"><span class="lineNum">      41</span> <span class="tlaGNC">           2 :   factory AbsenceModel.fromJson(</span></span>
 <span id="L42"><span class="lineNum">      42</span>              :     Map&lt;String, dynamic&gt; json,</span>
 <span id="L43"><span class="lineNum">      43</span>              :     Map&lt;int, Map&lt;String, String&gt;&gt; membersMap,</span>
 <span id="L44"><span class="lineNum">      44</span>              :   ) {</span>
-<span id="L45"><span class="lineNum">      45</span> <span class="tlaGNC">           1 :     int userId = json['userId'] as int;</span></span>
-<span id="L46"><span class="lineNum">      46</span> <span class="tlaGNC">           1 :     return AbsenceModel(</span></span>
-<span id="L47"><span class="lineNum">      47</span> <span class="tlaGNC">           1 :       id: json['id'] as int,</span></span>
-<span id="L48"><span class="lineNum">      48</span> <span class="tlaGNC">           1 :       admitterId: json['admitterId'] as int?,</span></span>
-<span id="L49"><span class="lineNum">      49</span> <span class="tlaGNC">           1 :       admitterNote: json['admitterNote'] as String?,</span></span>
-<span id="L50"><span class="lineNum">      50</span> <span class="tlaGNC">           1 :       confirmedAt: json['confirmedAt'] as String?,</span></span>
-<span id="L51"><span class="lineNum">      51</span> <span class="tlaGNC">           1 :       createdAt: json['createdAt'] as String,</span></span>
-<span id="L52"><span class="lineNum">      52</span> <span class="tlaGNC">           1 :       crewId: json['crewId'] as int,</span></span>
-<span id="L53"><span class="lineNum">      53</span> <span class="tlaGNC">           1 :       endDate: json['endDate'] as String,</span></span>
-<span id="L54"><span class="lineNum">      54</span> <span class="tlaGNC">           1 :       startDate: json['startDate'] as String,</span></span>
-<span id="L55"><span class="lineNum">      55</span> <span class="tlaGNC">           1 :       type: json['type'] as String,</span></span>
+<span id="L45"><span class="lineNum">      45</span> <span class="tlaGNC">           2 :     int userId = json['userId'] as int;</span></span>
+<span id="L46"><span class="lineNum">      46</span> <span class="tlaGNC">           2 :     return AbsenceModel(</span></span>
+<span id="L47"><span class="lineNum">      47</span> <span class="tlaGNC">           2 :       id: json['id'] as int,</span></span>
+<span id="L48"><span class="lineNum">      48</span> <span class="tlaGNC">           2 :       admitterId: json['admitterId'] as int?,</span></span>
+<span id="L49"><span class="lineNum">      49</span> <span class="tlaGNC">           2 :       admitterNote: json['admitterNote'] as String?,</span></span>
+<span id="L50"><span class="lineNum">      50</span> <span class="tlaGNC">           2 :       confirmedAt: json['confirmedAt'] as String?,</span></span>
+<span id="L51"><span class="lineNum">      51</span> <span class="tlaGNC">           2 :       createdAt: json['createdAt'] as String,</span></span>
+<span id="L52"><span class="lineNum">      52</span> <span class="tlaGNC">           2 :       crewId: json['crewId'] as int,</span></span>
+<span id="L53"><span class="lineNum">      53</span> <span class="tlaGNC">           2 :       endDate: json['endDate'] as String,</span></span>
+<span id="L54"><span class="lineNum">      54</span> <span class="tlaGNC">           2 :       startDate: json['startDate'] as String,</span></span>
+<span id="L55"><span class="lineNum">      55</span> <span class="tlaGNC">           2 :       type: json['type'] as String,</span></span>
 <span id="L56"><span class="lineNum">      56</span>              :       userId: userId,</span>
-<span id="L57"><span class="lineNum">      57</span> <span class="tlaGNC">           1 :       memberNote: json['memberNote'] as String?,</span></span>
-<span id="L58"><span class="lineNum">      58</span> <span class="tlaGNC">           1 :       rejectedAt: json['rejectedAt'] as String?,</span></span>
-<span id="L59"><span class="lineNum">      59</span> <span class="tlaGNC">           1 :       name: membersMap[userId]?['name'] ?? 'Unknown',</span></span>
-<span id="L60"><span class="lineNum">      60</span> <span class="tlaGNC">           1 :       image: membersMap[userId]?['image'] ?? '',</span></span>
-<span id="L61"><span class="lineNum">      61</span> <span class="tlaGNC">           1 :       status: json['status'] as String,</span></span>
+<span id="L57"><span class="lineNum">      57</span> <span class="tlaGNC">           2 :       memberNote: json['memberNote'] as String?,</span></span>
+<span id="L58"><span class="lineNum">      58</span> <span class="tlaGNC">           2 :       rejectedAt: json['rejectedAt'] as String?,</span></span>
+<span id="L59"><span class="lineNum">      59</span> <span class="tlaGNC">           3 :       name: membersMap[userId]?['name'] ?? 'Unknown',</span></span>
+<span id="L60"><span class="lineNum">      60</span> <span class="tlaGNC">           3 :       image: membersMap[userId]?['image'] ?? '',</span></span>
+<span id="L61"><span class="lineNum">      61</span> <span class="tlaGNC">           2 :       status: json['status'] as String,</span></span>
 <span id="L62"><span class="lineNum">      62</span>              :     );</span>
 <span id="L63"><span class="lineNum">      63</span>              :   }</span>
 <span id="L64"><span class="lineNum">      64</span>              : </span>

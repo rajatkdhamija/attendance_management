@@ -13,11 +13,6 @@ abstract class AbsenceLocalDataSource {
 }
 
 class AbsenceLocalDataSourceImplementation implements AbsenceLocalDataSource {
-  Future<List<dynamic>> readJsonFile(String path) async {
-    String content = await File(path).readAsString();
-    Map<String, dynamic> data = jsonDecode(content);
-    return data['payload'];
-  }
 
   Future<String> readLocalJsonFile(String path) async {
     return await rootBundle.loadString(path);
